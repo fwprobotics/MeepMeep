@@ -7,6 +7,7 @@ Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports [Road Run
 # Table of Contents
 
 - [Installing (Android Studio)](#-installing-android-studio)
+- [Exporting for Crowdscout](#exporting-for-crowdscout)
 - [Misc](#misc)
   - [Poor Performance?](#poor-performance)
   - [Adding a second bot](#adding-a-second-bot)
@@ -94,6 +95,26 @@ public class MeepMeepTesting {
    8. From here, in the bottom right of the window, press "Apply" then "Ok".
    9. It will now automatically switch to that Run/Debug Configuration profile.
 10. If at any point you would like to build code onto your Control Hub or Phone, then click the Run/Debug configuration profile at the top to open the dropdown menu and select TeamCode. Perform the same steps to switch back to MeepMeepRun.
+
+# Exporting For CrowdScout
+1. Open your MeepMeepTestsing java class file.
+2. Run one of your auto routes on `myBot` using `runAction`:
+```
+myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-30, 60, 0))
+                .strafeTo(new Vector2d(-30, 35))
+                .strafeTo(new Vector2d(-30, 12))
+                .strafeTo(new Vector2d(0, 12))
+                .strafeTo(new Vector2d(50, 18))
+                .strafeTo(new Vector2d(60, 60))
+                .build());
+```
+3. Before the `start` line export the route by adding:
+```
+myBot.export("{your name}");
+```
+4. Run the code and the route will be exported.
+5. Repeat this process until you've exported all your routes.
+6. Upload the routes in their respective section on CrowdScout
 
 # Misc
 
