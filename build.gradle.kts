@@ -6,6 +6,7 @@ plugins {
     `java-library`
     `maven-publish`
     kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.8.10"
 }
 
 val githubRepo = "acmerobotics/MeepMeep"
@@ -35,6 +36,8 @@ dependencies {
 
     api("com.acmerobotics.roadrunner:core:1.0.0-beta8")
     api("com.acmerobotics.roadrunner:actions:1.0.0-beta8")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
 }
 
 sourceSets["main"].java {
@@ -54,9 +57,9 @@ val sourcesJar by tasks.creating(Jar::class) {
 publishing {
     publications {
         create<MavenPublication>("meepmeep") {
-            groupId = "com.acmerobotics.roadrunner"
+            groupId = "org.fwparkerrobotics.crowdscout"
             artifactId = "MeepMeep"
-            version = "0.1.5"
+            version = "0.1.5-crowdscout"
 
             from(components["java"])
             artifact(sourcesJar)

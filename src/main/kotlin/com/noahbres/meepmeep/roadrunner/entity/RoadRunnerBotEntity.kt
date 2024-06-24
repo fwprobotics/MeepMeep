@@ -2,7 +2,6 @@ package com.noahbres.meepmeep.roadrunner.entity
 
 import com.acmerobotics.roadrunner.Action
 import com.acmerobotics.roadrunner.Pose2d
-import com.acmerobotics.roadrunner.SleepAction
 import com.noahbres.meepmeep.MeepMeep
 import com.noahbres.meepmeep.core.colorscheme.ColorScheme
 import com.noahbres.meepmeep.core.entity.BotEntity
@@ -12,6 +11,9 @@ import com.noahbres.meepmeep.roadrunner.Constraints
 import com.noahbres.meepmeep.roadrunner.DriveShim
 import com.noahbres.meepmeep.roadrunner.DriveTrainType
 import com.noahbres.meepmeep.roadrunner.ui.TrajectoryProgressSliderMaster
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.File
 import kotlin.math.min
 
 // TODO(ryanbrott): seems like the bot should own the path entities and selectively update/render the ones
@@ -67,13 +69,13 @@ class RoadRunnerBotEntity(
                 for ((beginTime, seg) in timeline) {
                     // Fill in the gap with the starting pose of the next segment.
                     if (beginTime > trajectorySequenceElapsedTime) {
-                        segPose = seg[0.0]
+                        segPose = seg.get(0.0)
                         break
                     }
 
                     val segmentOffsetTime = trajectorySequenceElapsedTime - beginTime
                     if (segmentOffsetTime < seg.duration) {
-                        segPose = seg[segmentOffsetTime]
+                        segPose = seg.get(segmentOffsetTime)
                         break
                     }
                 }
@@ -106,6 +108,38 @@ class RoadRunnerBotEntity(
                 sliderMaster?.reportDone(sliderMasterIndex ?: -1)
             }
         }.exhaustive
+    }
+
+    fun export(name: String) {
+        println("EXPORTING")
+        val (dt, timeline) = currentActionTimeline ?: return
+        val pathData: ArrayList<Map<String, Double>> = ArrayList();
+
+                var segPose: Pose2d? = null
+                for ((beginTime, seg) in timeline) {
+
+                    for (i in 0..Math.ceil(seg.duration).toInt()) {
+                        if (i < seg.duration) {
+                            segPose = seg.get(i.toDouble())
+                        }
+
+                        if (segPose != null) {
+                            pathData.add(
+                                mapOf(
+                                    "x" to 500-((segPose.position.y+72)*500/144),
+                                    "y" to 500-(segPose.position.x+72)*500/144,
+                                    "t" to (beginTime + i).coerceAtMost(beginTime + seg.duration)*1000
+                                )
+                            )
+                        }
+                    }
+        }
+        val pathDataJson = Json.encodeToString( pathData);
+        val pathName = "crowdscout_routes/$name.json"
+        File("crowdscout_routes").mkdir()
+        File(pathName).writeText(pathDataJson)
+        println("EXPORTED TO: $pathName")
+
     }
 
     fun start() {

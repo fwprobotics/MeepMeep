@@ -58,3 +58,6 @@ build
 
 # IntelliJ
 out/
+.idea/modules/MeepMeep.main.iml
+/.idea
+.idea/misc.xml
