@@ -7,9 +7,12 @@ import javax.swing.JFrame
 import javax.swing.JPanel
 import kotlin.system.exitProcess
 
-class WindowFrame(title: String, windowSize: Int) : JFrame() {
-    var internalWidth = windowSize
-    var internalHeight = windowSize
+class WindowFrame(title: String, windowWidth: Int, windowHeight: Int) : JFrame() {
+
+    constructor(title: String, windowSize: Int) : this(title, windowSize, windowSize)
+
+    var internalWidth = windowWidth
+    var internalHeight = windowHeight
 
     val canvas = MainCanvas(internalWidth, internalHeight)
     val canvasPanel = JPanel()

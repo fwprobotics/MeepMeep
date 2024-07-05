@@ -58,3 +58,5 @@ build
 
 # IntelliJ
 out/
+/.idea/
+/local.properties
