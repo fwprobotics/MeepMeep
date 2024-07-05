@@ -3,19 +3,32 @@ package com.noahbres.meepmeep
 import com.acmerobotics.roadrunner.Vector2d
 import com.noahbres.meepmeep.core.colorscheme.ColorManager
 import com.noahbres.meepmeep.core.colorscheme.ColorScheme
-import com.noahbres.meepmeep.core.entity.*
+import com.noahbres.meepmeep.core.entity.AxesEntity
+import com.noahbres.meepmeep.core.entity.CompassEntity
+import com.noahbres.meepmeep.core.entity.Entity
+import com.noahbres.meepmeep.core.entity.EntityEventListener
+import com.noahbres.meepmeep.core.entity.ThemedEntity
+import com.noahbres.meepmeep.core.entity.ZIndexManager
 import com.noahbres.meepmeep.core.ui.WindowFrame
 import com.noahbres.meepmeep.core.util.FieldUtil
 import com.noahbres.meepmeep.core.util.LoopManager
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity
 import com.noahbres.meepmeep.roadrunner.ui.TrajectoryProgressSliderMaster
-import java.awt.*
+import java.awt.AlphaComposite
+import java.awt.Font
+import java.awt.Graphics2D
+import java.awt.Image
+import java.awt.RenderingHints
+import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
-import java.awt.event.*
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
+import java.awt.event.MouseMotionListener
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
-import javax.swing.*
-import javax.swing.border.EtchedBorder
+import javax.swing.UIManager
 
 
 open class MeepMeep(private val windowWidth: Int, private val windowHeight: Int, fps: Int = 60) {
