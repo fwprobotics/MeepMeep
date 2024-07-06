@@ -8,7 +8,7 @@ import kotlin.math.min
 class FieldUtil {
     companion object {
         @JvmStatic
-        var FIELD_WIDTH = 141
+        var FIELD_WIDTH = 188
 
         @JvmStatic
         var FIELD_HEIGHT = 141
@@ -26,7 +26,7 @@ class FieldUtil {
         @JvmStatic
         @JvmOverloads
         fun fieldCoordsToScreenCoords(vector2d: Vector2d, canvasWidth: Double = CANVAS_WIDTH, canvasHeight: Double = CANVAS_HEIGHT): Vector2d {
-            return (mirrorY(vector2d) + Vector2d(FIELD_WIDTH / 2.0, FIELD_HEIGHT / 2.0)) * min(canvasWidth, canvasHeight) / FIELD_WIDTH.toDouble()
+            return (mirrorY(vector2d) + Vector2d(FIELD_WIDTH / 2.0, FIELD_HEIGHT / 2.0)) * min(canvasWidth, canvasHeight) / FIELD_HEIGHT.toDouble()
         }
 
         @JvmStatic

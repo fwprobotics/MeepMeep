@@ -1,6 +1,6 @@
-# MeepMeep
+# MeepMeepCRI
 
-Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports [Road Runner 1.0](https://rr.brott.dev/docs/v1-0/new-features/).
+Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports the Center Stage field for Chicago Robotics Invitational 2024 and [Road Runner 1.0](https://rr.brott.dev/docs/v1-0/new-features/).
 
 <img src="/images/readme/screen-recording.gif" width="500" height="500"/>
 

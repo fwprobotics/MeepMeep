@@ -3,22 +3,38 @@ package com.noahbres.meepmeep
 import com.acmerobotics.roadrunner.Vector2d
 import com.noahbres.meepmeep.core.colorscheme.ColorManager
 import com.noahbres.meepmeep.core.colorscheme.ColorScheme
-import com.noahbres.meepmeep.core.entity.*
+import com.noahbres.meepmeep.core.entity.AxesEntity
+import com.noahbres.meepmeep.core.entity.CompassEntity
+import com.noahbres.meepmeep.core.entity.Entity
+import com.noahbres.meepmeep.core.entity.EntityEventListener
+import com.noahbres.meepmeep.core.entity.ThemedEntity
+import com.noahbres.meepmeep.core.entity.ZIndexManager
 import com.noahbres.meepmeep.core.ui.WindowFrame
 import com.noahbres.meepmeep.core.util.FieldUtil
 import com.noahbres.meepmeep.core.util.LoopManager
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity
 import com.noahbres.meepmeep.roadrunner.ui.TrajectoryProgressSliderMaster
-import java.awt.*
+import java.awt.AlphaComposite
+import java.awt.Font
+import java.awt.Graphics2D
+import java.awt.Image
+import java.awt.RenderingHints
+import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
-import java.awt.event.*
+import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
+import java.awt.event.MouseMotionListener
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
-import javax.swing.*
-import javax.swing.border.EtchedBorder
+import javax.swing.UIManager
 
 
-open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: Int = 60) {
+open class MeepMeep(private val windowWidth: Int, private val windowHeight: Int, fps: Int = 60) {
+
+    @JvmOverloads constructor(windowSize: Int, fps: Int = 60): this(windowSize, windowSize, fps)
+
     companion object {
         @JvmStatic
         lateinit var DEFAULT_AXES_ENTITY: AxesEntity
@@ -37,7 +53,7 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
         lateinit var FONT_CMU_BOLD: Font
     }
 
-    val windowFrame = WindowFrame("Meep Meep", windowSize)
+    val windowFrame = WindowFrame("Meep Meep", windowWidth, windowHeight)
     val canvas = windowFrame.canvas
 
     val colorManager = ColorManager()
@@ -157,12 +173,12 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
         FONT_CMU = Font.createFont(Font.TRUETYPE_FONT, classLoader.getResourceAsStream("font/cmunrm.ttf"))
         FONT_CMU_BOLD = Font.createFont(Font.TRUETYPE_FONT, classLoader.getResourceAsStream("font/cmunbx.ttf"))
 
-        FieldUtil.CANVAS_WIDTH = windowSize.toDouble()
-        FieldUtil.CANVAS_HEIGHT = windowSize.toDouble()
+        FieldUtil.CANVAS_WIDTH = windowWidth.toDouble()
+        FieldUtil.CANVAS_HEIGHT = windowHeight.toDouble()
 
         DEFAULT_AXES_ENTITY = AxesEntity(this, 0.8, colorManager.theme, FONT_CMU_BOLD_LIGHT, 20f)
         DEFAULT_COMPASS_ENTITY = CompassEntity(
-            this, colorManager.theme, 30.0, 30.0, Vector2d(-54.0, 54.0)
+            this, colorManager.theme, 30.0, 30.0, Vector2d(-(FieldUtil.FIELD_WIDTH / 2.0) + 18.0, FieldUtil.FIELD_HEIGHT / 2.0 - 18.0)
         )
 
         // Handle UI
@@ -243,10 +259,10 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
         val classLoader = Thread.currentThread().contextClassLoader
 
         fun rotated(im: BufferedImage, angle: Double): BufferedImage {
-            val rotatedImage = BufferedImage(im.width, im.height, im.type)
+            val rotatedImage = BufferedImage(im.height, im.width, im.type)
             val graphics2D = rotatedImage.createGraphics()
-            graphics2D.rotate(angle, im.width / 2.0, im.height / 2.0)
-            graphics2D.drawImage(im, null, 0, 0)
+            graphics2D.rotate(angle)
+            graphics2D.drawImage(im, null, 0, -im.height)
             return rotatedImage
         }
 
@@ -319,7 +335,11 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
                 colorManager.isDarkMode = false
                 rotated(ImageIO.read(classLoader.getResourceAsStream("background/season-2023-centerstage/field-2023-juice-light.png")), Math.toRadians(90.0))
             }
-        }.getScaledInstance(windowSize, windowSize, Image.SCALE_SMOOTH)
+            Background.FIELD_CENTERSTAGE_JUICE_LIGHT_CRI -> {
+                colorManager.isDarkMode = false
+                rotated(ImageIO.read(classLoader.getResourceAsStream("background/season-2023-centerstage/cri/field-2023-juice-light-cri.png")), Math.toRadians(90.0))
+            }
+        }.getScaledInstance(windowWidth, windowHeight, Image.SCALE_SMOOTH)
 
         refreshTheme()
 
@@ -327,7 +347,7 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
     }
 
     fun setBackground(image: Image): MeepMeep {
-        bg = image.getScaledInstance(windowSize, windowSize, Image.SCALE_SMOOTH)
+        bg = image.getScaledInstance(windowWidth, windowHeight, Image.SCALE_SMOOTH)
 
         return this
     }
@@ -358,8 +378,8 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
     }
 
     private fun onCanvasResize() {
-        FieldUtil.CANVAS_WIDTH = windowSize.toDouble()
-        FieldUtil.CANVAS_HEIGHT = windowSize.toDouble()
+        FieldUtil.CANVAS_WIDTH = windowWidth.toDouble()
+        FieldUtil.CANVAS_HEIGHT = windowHeight.toDouble()
 
         entityList.forEach {
             it.setCanvasDimensions(FieldUtil.CANVAS_WIDTH, FieldUtil.CANVAS_HEIGHT)
@@ -451,5 +471,6 @@ open class MeepMeep @JvmOverloads constructor(private val windowSize: Int, fps: 
         FIELD_CENTERSTAGE_OFFICIAL,
         FIELD_CENTERSTAGE_JUICE_DARK,
         FIELD_CENTERSTAGE_JUICE_LIGHT,
+        FIELD_CENTERSTAGE_JUICE_LIGHT_CRI
     }
 }
