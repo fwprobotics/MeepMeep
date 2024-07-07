@@ -7,6 +7,7 @@ import com.noahbres.meepmeep.core.colorscheme.ColorScheme
 import com.noahbres.meepmeep.core.entity.BotEntity
 import com.noahbres.meepmeep.core.entity.EntityEventListener
 import com.noahbres.meepmeep.core.exhaustive
+import com.noahbres.meepmeep.core.util.FieldUtil
 import com.noahbres.meepmeep.roadrunner.Constraints
 import com.noahbres.meepmeep.roadrunner.DriveShim
 import com.noahbres.meepmeep.roadrunner.DriveTrainType
@@ -126,8 +127,8 @@ class RoadRunnerBotEntity(
                         if (segPose != null) {
                             pathData.add(
                                 mapOf(
-                                    "x" to 500-((segPose.position.y+72)*500/144),
-                                    "y" to 500-(segPose.position.x+72)*500/144,
+                                    "x" to 500-((segPose.position.y+FieldUtil.FIELD_HEIGHT/2)*500/144),
+                                    "y" to (500*FieldUtil.FIELD_WIDTH/FieldUtil.FIELD_HEIGHT)-(segPose.position.x+FieldUtil.FIELD_WIDTH/2)*(500*FieldUtil.FIELD_WIDTH/FieldUtil.FIELD_HEIGHT)/FieldUtil.FIELD_WIDTH,
                                     "t" to (beginTime + i).coerceAtMost(beginTime + seg.duration)*1000
                                 )
                             )

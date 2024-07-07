@@ -59,7 +59,7 @@ publishing {
         create<MavenPublication>("meepmeep") {
             groupId = "org.fwparkerrobotics.crowdscout"
             artifactId = "MeepMeep"
-            version = "0.1.5-crowdscout"
+            version = "0.1.5-cri24"
 
             from(components["java"])
             artifact(sourcesJar)
