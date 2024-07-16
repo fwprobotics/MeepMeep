@@ -35,6 +35,7 @@ Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports [Road Run
         
         repositories {
             maven { url = 'https://maven.brott.dev/' }
+            maven { url = 'https://jitpack.io/' }
         }
 
         dependencies {
@@ -42,10 +43,10 @@ Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports [Road Run
         }
         
 
-7.  When android studio prompts you to make a gradle sync, click "Sync Now".
+8.  When android studio prompts you to make a gradle sync, click "Sync Now".
     <img src="/images/readme/installationStep7.png" width="644" height="20"/>
 
-8.  Create a class for your MeepMeepTesting java module if it does not yet exist. Paste the following sample in it. Feel free to change this later.
+9.  Create a class for your MeepMeepTesting java module if it does not yet exist. Paste the following sample in it. Feel free to change this later.
 
 ```java
 package com.example.meepmeeptesting;
