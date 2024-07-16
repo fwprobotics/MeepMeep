@@ -4,6 +4,7 @@ Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports the Cente
 
 <img src="/images/readme/screen-recording.gif" width="500" height="500"/>
 
+
 # Table of Contents
 
 - [Installing (Android Studio)](#-installing-android-studio)
@@ -35,17 +36,18 @@ Fork of [MeepMeep](https://github.com/NoahBres/MeepMeep) that supports the Cente
         
         repositories {
             maven { url = 'https://maven.brott.dev/' }
+            maven { url = 'https://jitpack.io/' }
         }
 
         dependencies {
-            implementation 'com.acmerobotics.roadrunner:MeepMeep:0.1.3'
+            implementation 'implementation 'com.github.fwprobotics:MeepMeep:v0.1.6-cri24'
         }
         
 
-7.  When android studio prompts you to make a gradle sync, click "Sync Now".
+8.  When android studio prompts you to make a gradle sync, click "Sync Now".
     <img src="/images/readme/installationStep7.png" width="644" height="20"/>
 
-8.  Create a class for your MeepMeepTesting java module if it does not yet exist. Paste the following sample in it. Feel free to change this later.
+9.  Create a class for your MeepMeepTesting java module if it does not yet exist. Paste the following sample in it. Feel free to change this later.
 
 ```java
 package com.example.meepmeeptesting;
@@ -57,7 +59,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(900, 600, 60); // for aspect ratio
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -75,7 +77,7 @@ public class MeepMeepTesting {
                 .turn(Math.toRadians(90))
                 .build());
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_LIGHT_CRI)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
@@ -208,3 +210,4 @@ Default Bot Settings:
 - Start Pose: (x: 0in, y: 0in, heading: 0rad)
 - Color Scheme: Inherited from MeepMeep.colorManager unless overriden
 - Drive Train Type: Mecanum
+
